@@ -1,0 +1,53 @@
+@keyframes slide-left {
+    0% {
+      transform: translateX(100%); 
+      filter: grayscale(100%); 
+    }
+    100% {
+      transform: translateX(0); 
+      filter: grayscale(0%); 
+    }
+  }
+  
+  .slide-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black; 
+    z-index: 1000; 
+    pointer-events: none; 
+    opacity: 1; 
+  }
+
+body {
+    background: url('./TeamRocket.jpg') no-repeat center center fixed; 
+    background-size: cover; 
+    margin: 0; 
+    padding: 0; 
+}
+  
+  .pokeball-wrapper {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    height: 100vh; 
+  }
+  
+  .pokeball-button {
+    background: url('./pokeball.png') no-repeat center; 
+    background-position: center; 
+    background-size: contain; 
+    width: 500px; 
+    height: 500px;
+    border: none; 
+    cursor: pointer; 
+    transition: all 0.1s; 
+  }
+  
+  .pokeball-button:hover {
+    background: url('./pokeball.gif') no-repeat center; 
+    background-position: center; 
+    background-size: cover; 
+  }
