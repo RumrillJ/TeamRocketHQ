@@ -1,5 +1,6 @@
 package com.example.DTOs;
 
+import com.example.enums.ReimbStatusEnum;
 import com.example.models.User;
 
 public class IncomingReimbursementDTO {
@@ -7,14 +8,23 @@ public class IncomingReimbursementDTO {
     private String description;
     private Double amount;
 
-    private User user;
+    private ReimbStatusEnum status;
+
     public IncomingReimbursementDTO() {
     }
 
-    public IncomingReimbursementDTO(String description, Double amount, User user) {
+    public IncomingReimbursementDTO(String description, Double amount, ReimbStatusEnum status) {
         this.description = description;
         this.amount = amount;
-        this.user = user;
+        this.status = status;
+    }
+
+    public ReimbStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ReimbStatusEnum status) {
+        this.status = status;
     }
 
     public String getDescription() {
@@ -33,20 +43,12 @@ public class IncomingReimbursementDTO {
         this.amount = amount;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
         return "IncomingReimbursementDTO{" +
                 "description='" + description + '\'' +
                 ", amount=" + amount +
-                ", user=" + user +
+                ", status=" + status +
                 '}';
     }
 }

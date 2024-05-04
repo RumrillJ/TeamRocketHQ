@@ -1,6 +1,7 @@
 export interface ReimbursementInterface{
-    reimbursementId?: number,
+    reimbId?: number,
     description: string,
+    status?: string,
     amount: number,
     userId?: number
 }

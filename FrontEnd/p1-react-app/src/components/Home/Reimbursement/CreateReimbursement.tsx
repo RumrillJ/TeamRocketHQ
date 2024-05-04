@@ -9,7 +9,8 @@ export const CreateReimbursement: React.FC = () => {
 
     const [reimb, setReimb] = useState<ReimbursementInterface>({
         description: "",
-        amount: 0
+        amount: 0,
+        status: "PENDING"
     })
 
     const submitReimb = async () => {

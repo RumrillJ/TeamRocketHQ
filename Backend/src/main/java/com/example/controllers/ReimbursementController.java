@@ -2,6 +2,7 @@ package com.example.controllers;
 
 import com.example.DTOs.IncomingReimbursementDTO;
 import com.example.enums.ReimbStatusEnum;
+import com.example.enums.RoleEnum;
 import com.example.models.Reimbursement;
 import com.example.models.User;
 import com.example.services.ReimbursementService;
@@ -38,22 +39,34 @@ public class ReimbursementController {
         Reimbursement newReimb =  reimbursementService.createReimbursement(reimbursement, sessUserId);
         return ResponseEntity.ok(newReimb);
     }
-    @GetMapping("/reimbForUser/{userId}")
-    public ResponseEntity<List<Reimbursement>> getReimbForUser(@PathVariable Long userId){
-        List<Reimbursement> reimbs = reimbursementService.getAllReimsForUser(userId);
-
+    @GetMapping("/reimbForUser")
+    public ResponseEntity<List<Reimbursement>> getReimbForUser(HttpSession session){
+        if(session.getAttribute("userId") == null) {
+            return ResponseEntity.status(401).build();
+        }
+        Long sessUserId = (Long) session.getAttribute("userId");
+        List<Reimbursement> reimbs = reimbursementService.getAllReimsForUser(sessUserId);
         return ResponseEntity.ok(reimbs);
 
     }
     @GetMapping("/allReimbs")
-    public ResponseEntity<List<Reimbursement>> getAllReimbs(){
+    public ResponseEntity<List<Reimbursement>> getAllReimbs(HttpSession session){
+        if(session.getAttribute("userId") == null){
+            return ResponseEntity.status(401).build();
+        }
+        if(session.getAttribute("role") != RoleEnum.valueOf("Captain")){
+            return ResponseEntity.status(403).build();
+        }
         List<Reimbursement> reimbs = reimbursementService.getAllReims();
 
         return ResponseEntity.ok(reimbs);
 
     }
     @GetMapping("/reimbsByStatus/{reimbStatusEnum}")
-    public ResponseEntity<List<Reimbursement>> getReimbsByStatus(@PathVariable("reimbStatusEnum") ReimbStatusEnum reimbStatusEnum){
+    public ResponseEntity<List<Reimbursement>> getReimbsByStatus(@PathVariable("reimbStatusEnum") ReimbStatusEnum reimbStatusEnum, HttpSession session){
+        if(session.getAttribute("userId") == null){
+            return ResponseEntity.status(401).build();
+        }
         List<Reimbursement> reimbs = reimbursementService.getReimbsByStatus(reimbStatusEnum);
 
         return ResponseEntity.ok(reimbs);
@@ -66,17 +79,21 @@ public class ReimbursementController {
         return ResponseEntity.ok(reimbs);
     }
 
-    @PatchMapping("/{reimbStatus}/{reimbStatusId}")
-    public ResponseEntity<Reimbursement> updateReimbStatus(@PathVariable ReimbStatusEnum reimbStatus, @PathVariable Long reimbStatusId){
-        Optional<Reimbursement> optNewReimb = reimbursementService.findReimbById(reimbStatusId);
+    @PutMapping("/updateReimbStatus/{reimbId}")
+    public ResponseEntity<?> updateReimbStatus(@PathVariable Long reimbId, @RequestBody IncomingReimbursementDTO reimbursement, HttpSession session){
+
+        if(session.getAttribute("userId") == null){
+            return ResponseEntity.status(401).build();
+        }
+        if(session.getAttribute("role") != RoleEnum.valueOf("Captain")){
+            return ResponseEntity.status(403).build();
+        }
+        Optional<Reimbursement> optNewReimb = reimbursementService.findReimbById(reimbId);
         if(optNewReimb.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        Reimbursement newReimb = optNewReimb.get();
-        newReimb.setStatus(reimbStatus);
-        return ResponseEntity.accepted().body(reimbursementService.saveReimb(newReimb));
-
-
+        optNewReimb.get().setStatus(reimbursement.getStatus());
+        return ResponseEntity.accepted().body(reimbursementService.saveReimb(optNewReimb.get()));
     }
     @PatchMapping("/description/{reimbId}")
     public ResponseEntity<Reimbursement> updateReimbDescription(@RequestBody String reimbDescription, @PathVariable Long reimbId){

@@ -36,6 +36,10 @@ public class Reimbursement {
         this.user = user;
     }
 
+    public Long getReimbId() {
+        return reimbId;
+    }
+
     public String getDescription() {
         return description;
     }

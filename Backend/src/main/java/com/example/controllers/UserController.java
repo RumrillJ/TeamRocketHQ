@@ -92,12 +92,13 @@ public class UserController {
 
     @PatchMapping("/{userRole}/{userId}")
     public ResponseEntity<User> updataUserRole(@PathVariable RoleEnum userRole, @PathVariable Long userId, HttpSession session){
+        /*
         if(session.getAttribute("userId") == null){
             return ResponseEntity.status(401).build();
         }
         if(session.getAttribute("role") != RoleEnum.valueOf("Captain")){
             return ResponseEntity.status(403).build();
-        }
+        }*/
         Optional<User> optUpdateUser = userService.findUserById(userId);
         if(optUpdateUser.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -107,6 +108,17 @@ public class UserController {
         userService.updateUserStatus(updateUser);
         return ResponseEntity.accepted().body(updateUser);
 
+    }
+
+    @GetMapping("/userRole")
+    public ResponseEntity<RoleEnum> getUserRole(HttpSession session){
+        if(session.getAttribute("userId") == null){
+            return ResponseEntity.status(401).build();
+        }
+        Long sessUserId = (Long) session.getAttribute("userId");
+        Optional<User> optUser = userService.findUserById(sessUserId);
+        RoleEnum userRole = optUser.get().getRole();
+        return ResponseEntity.ok(userRole);
     }
 
 }
