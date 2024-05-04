@@ -1,25 +1,18 @@
 import { useNavigate } from "react-router-dom"
+import { ReimbursementInterface } from "../../Interfaces/ReimbursementInterface"
 
 export const Reimbursement: React.FC = () => {
 
     const navigate = useNavigate()
 
-    const backToHome = () => {
-
-        navigate('/home')
-
-    }
-
     return(
         <div>
             <input type="text" name="description"/>
             <input type="text" name="amount"/>
-            <button>Submit</button>
-            <button onClick={backToHome}>Back</button>
+            <button onClick={() => navigate("/home")}>Back</button>
+            <button onClick={() => navigate("/home/reimbursement/createReimbursement")}>Create Reimbursement</button>
 
         </div>
     )
-
-
 
 }

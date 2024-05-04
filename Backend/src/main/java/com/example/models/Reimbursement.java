@@ -21,28 +21,19 @@ public class Reimbursement {
     private Double amount;
     @Enumerated(EnumType.STRING)
     private ReimbStatusEnum status;
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private User user;
 
     public Reimbursement() {
     }
 
-    public Reimbursement(Long reimbId, String description, Double amount, ReimbStatusEnum status, User user) {
-        this.reimbId = reimbId;
+    public Reimbursement(String description, Double amount, ReimbStatusEnum status, User user) {
         this.description = description;
         this.amount = amount;
         this.status = status;
         this.user = user;
-    }
-
-
-    public Long getReimbId() {
-        return reimbId;
-    }
-
-    public void setReimbId(Long reimbId) {
-        this.reimbId = reimbId;
     }
 
     public String getDescription() {

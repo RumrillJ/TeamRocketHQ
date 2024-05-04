@@ -1,20 +1,40 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import { UserInterface } from "../../Interfaces/UserInterface"
 
 export const DeleteUser: React.FC = () => {
 
-    //let userInput:any = 0
-    const [userInput, setInput] = useState()
+    const [user, setInput] = useState<UserInterface[]>([])
+    
+    useEffect(() => {
+        getAllUsers()
+    }, [])
 
-    const deleteUser = async() => {
-        const response = await axios.delete('http://localhost/users/2')// + userInput2)
-
+    const deleteUser = async(userId: any) => {
+        try{
+            const response = await axios.delete(`http://localhost:8080/users/${userId}`, {withCredentials:true})
+            getAllUsers()
+        }catch (error){
+            console.error('Failed to find user', error)
+        }
     }
 
-    const getUserInput = (input:any) => {
-        //userInput = input.target.value
+    const mapUsers = () => {
+        return user.map(user => (
+            <div key={user.userId}>
+                {user.username},
+                {user.firstName}
+                <button onClick={() => deleteUser(user.userId)}>Delete</button>
+            </div>
+        ));
+    }
 
+    const getAllUsers = async() => {
+
+        const response = await axios.get('http://localhost:8080/users/allUsers', {withCredentials:true})
+        const result = response.data
+        setInput(response.data)
     }
 
     const location = useLocation()
@@ -23,19 +43,9 @@ export const DeleteUser: React.FC = () => {
 
 
     return(
-        <div>
-            {
-            
-            /*
-            <h1>User List</h1>
-            {data ? (
-            <pre>{JSON.stringify(data, null, 1)}</pre>
-            ) : (
-            <>error</> 
-            )}*/}
-            {/*<input type="number" value={userInput} onChange = {(e) => setInput(e.target.value)}  name="userInput"></input>*/}
-            <button onClick={deleteUser}>Delete User</button>
         
+        <div>
+            {mapUsers()}
         </div>
     )
 

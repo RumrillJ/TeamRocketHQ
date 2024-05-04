@@ -26,8 +26,6 @@ public class User {
     private String username;
     @Column(unique = true)
     private String email;
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Reimbursement> reimb;
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
@@ -42,14 +40,6 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public List<Reimbursement> getReimb() {
-        return reimb;
-    }
-
-    public void setReimb(List<Reimbursement> reimb) {
-        this.reimb = reimb;
     }
 
     public Long getUserId() {

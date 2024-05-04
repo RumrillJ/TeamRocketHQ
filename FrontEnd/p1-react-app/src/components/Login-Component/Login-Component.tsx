@@ -1,16 +1,44 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserInterface } from '../Interfaces/UserInterface';
+import { state } from '../../GlobalData/store';
 
 export const LoginComponent: React.FC = () => {
   const navigate = useNavigate();
 
+    const [user, setUser] = useState<UserInterface>({
+      username: "",
+      password: ""
+    })
+
+  const storeValues = (input: any) => {
+    if(input.target.name === "username"){
+      setUser((user) => ({...user, username: input.target.value}))
+    }else{
+      setUser((user) => ({...user, password: input.target.value}))
+    }
+  }
+
   const login = async () => {
-    navigate("/home");
+    const response = await axios.post("http://localhost:8080/users/login", user, {withCredentials:true})
+    .then((response)=> {
+      state.userSessionData = response.data
+      console.log(state.userSessionData)
+        
+      navigate("/home");
+    })
+    .catch((error) => {
+      alert("login failed")
+    })
+    
   };
 
   const register = async () => {
     navigate("/register");
   };
+
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-800">
@@ -22,6 +50,7 @@ export const LoginComponent: React.FC = () => {
           name="username"
           placeholder="Username"
           className="px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={storeValues}
         />
         
         <input
@@ -29,6 +58,7 @@ export const LoginComponent: React.FC = () => {
           name="password"
           placeholder="Password"
           className="px-3 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={storeValues}
         />
         
         <button
