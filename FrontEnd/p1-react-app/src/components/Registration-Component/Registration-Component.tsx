@@ -24,7 +24,7 @@ export const RegistrationComponent = () => {
 
   const handleKeyPress = (e : any) => {
     if (e.key === 'Enter') {
-      register(); // Trigger register when "Enter" is pressed
+      register(); 
     }
   };
 
@@ -46,13 +46,13 @@ export const RegistrationComponent = () => {
     <div className="login-container">
       <div className="login-box">
         <img src={RocketLogo} alt="Rocket Logo" />
-        <h1>Register for Team Rocket</h1>
+        <h1 className="small-heading">Join Team Rocket Now!</h1>
         <input
           type="text"
           name="username"
           onChange={storeValues}
           placeholder="Username"
-          onKeyPress={handleKeyPress} // Detect the "Enter" key
+          onKeyPress={handleKeyPress} 
         />
         <input
           type="password"

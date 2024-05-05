@@ -78,3 +78,11 @@
     color: #0056b3;
   }
   
+  .small-heading {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+  }
+  

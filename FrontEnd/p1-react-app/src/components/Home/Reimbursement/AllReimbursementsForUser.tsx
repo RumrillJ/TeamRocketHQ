@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import RocketLogo from './rocketlogo.png';
 import './Grunt.css'
+import { Navbar } from '../../Navbar/Navbar';
 
 export const AllReimbursementsForUser = () => {
   const navigate = useNavigate();
@@ -28,9 +29,9 @@ export const AllReimbursementsForUser = () => {
 
   return (
     <div className="reimb-page"> 
+      <Navbar/>
       <div className="reimb-box">
         <img src={RocketLogo} alt="Rocket Logo" />
-        <h1>Reimbursements</h1>
         <table className="reimb-table">
           <thead>
             <tr>

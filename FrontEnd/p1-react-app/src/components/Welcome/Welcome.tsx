@@ -16,6 +16,7 @@ export const Welcome: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
+      <h1 className="cool-heading">Click Pokeball to Continue....</h1>
       <button
         className="pokeball-button"
         onClick={enter} 

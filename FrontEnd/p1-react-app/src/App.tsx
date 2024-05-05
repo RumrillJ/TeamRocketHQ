@@ -23,8 +23,8 @@ function App() {
             <Route path='/login' element={<LoginComponent/>}/>
             <Route path='/register' element={<RegistrationComponent/>}/>
             <Route path='/home' element={<HomePage/>}/>
-            <Route path='/home/manage-users' element={<ManageUsers/>}/>
-            <Route path='/home/manage-users/delete-user' element={<DeleteUser/>}/>
+            <Route path='/home/manage-users' element={<DeleteUser/>}/>
+            {/*<Route path='/home/manage-users/delete-user' element={<DeleteUser/>}/> */}
             <Route path='/home/reimbursement/createReimbusement' element={<CreateReimbursement/>}/>
             <Route path='/home/gruntHome' element={<AllReimbursementsForUser/>}/>
             <Route path='/home/captainHome' element={<AllReimbursements/>}/>

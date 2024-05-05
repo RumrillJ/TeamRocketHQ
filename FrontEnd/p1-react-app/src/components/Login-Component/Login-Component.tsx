@@ -36,7 +36,7 @@ export const LoginComponent = () => {
     <div className="login-container">
       <div className="login-box">
         <img src={RocketLogo} alt="Rocket Logo" />
-        <h2>Please Login!</h2>
+        <h1 className="small-heading">Team Rocket Login</h1>
         <input
           type="text"
           name="username"
@@ -55,7 +55,7 @@ export const LoginComponent = () => {
           Sign In
         </button>
         <button className="join-now-button" onClick={register}>
-          New To Team Rocket? Join Now!
+          Not Apart Of Team Rocket? Join Now!
         </button>
       </div>
     </div>

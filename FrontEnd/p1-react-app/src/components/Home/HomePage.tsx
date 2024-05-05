@@ -1,49 +1,50 @@
-import { useLocation, useNavigate } from "react-router-dom"
-import { ReimbursementInterface } from "../Interfaces/ReimbursementInterface"
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './homepage.css';
 
-export const HomePage: React.FC<any> = () => {
-    
-    const navigate = useNavigate()
+export const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const [role, setRole] = useState<string | undefined>();
+  const [delayed, setDelayed] = useState(false);
 
-    const [role, setRole] = useState()
-    
-    const createReimbursement = () => {
-        navigate("/home/reimbursement/createReimbusement")
+  useEffect(() => {
+    const delayEffect = setTimeout(() => {
+      setDelayed(true); 
+    }, 1000); 
 
-    }
-    const manageUsers = () => {
-        navigate('/home/manage-users')
+    return () => clearTimeout(delayEffect); 
+  }, []); 
 
-    }
-    useEffect(() => {
-        // Fetch user role when the component mounts
-        const fetchUserRole = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/users/userRole', { withCredentials: true });
-                setRole(response.data);
-            } catch (error) {
-                console.error('Failed to fetch user role:', error);
-                alert('Failed to fetch user role');
-            }
-        };
-
-        fetchUserRole();
-    }, []);
-
-    useEffect(()=> {
-        if(role == "Grunt"){
-            (navigate("/home/gruntHome"))
-        }else if(role == "Captain"){
-            navigate("/home/captainHome")
+  useEffect(() => {
+    if (delayed) { 
+      const fetchUserRole = async () => {
+        try {
+          const response = await axios.get('http://localhost:8080/users/userRole', { withCredentials: true });
+          setRole(response.data);
+        } catch (error) {
+          console.error('Failed to fetch user role:', error);
+          alert('Failed to fetch user role');
         }
-    }, [role, navigate]);
-    
+      };
 
-    return(
-        
-        <div>
-        </div>
-    )
-}
+      fetchUserRole(); 
+    }
+  }, [delayed]); 
+
+  useEffect(() => {
+    if (role === 'Grunt') {
+      navigate('/home/gruntHome');
+    } else if (role === 'Captain') {
+      navigate('/home/captainHome');
+    }
+  }, [role, navigate]); 
+
+  return (
+    <div className="home-page">
+      <div className="pokeball-wrapper">
+        <div className="pokeball-gif"></div>
+      </div>
+    </div>
+  );
+};

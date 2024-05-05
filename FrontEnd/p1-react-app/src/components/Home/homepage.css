@@ -1,0 +1,14 @@
+
+.pokeball-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
+.pokeball-gif {
+  width: 400px; 
+  height: 400px; 
+  background: url('./pokeball.gif') no-repeat center; 
+  background-size: contain; 
+}
