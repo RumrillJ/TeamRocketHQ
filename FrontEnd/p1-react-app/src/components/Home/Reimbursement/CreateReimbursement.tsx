@@ -15,7 +15,7 @@ export const CreateReimbursement: React.FC = () => {
 
     const submitReimb = async () => {
         const response = await axios.post(`http://localhost:8080/reimbs/reimb`, reimb, {withCredentials:true})
-        alert(response.data)
+        navigate("/home")
 
     }
 
@@ -32,7 +32,7 @@ export const CreateReimbursement: React.FC = () => {
             <input type="text" name="description" onChange={storeValues} placeholder="description"/>
             <input inputMode="numeric" type="text" name="amount" onChange={storeValues} placeholder="amount"/>
             <button onClick={submitReimb}>Submit Reimbursement</button>
-            <button onClick={() => {navigate("/home/reimbursement")}}>Cancel</button>
+            <button onClick={() => {navigate("/home")}}>Cancel</button>
         </div>
     )
 

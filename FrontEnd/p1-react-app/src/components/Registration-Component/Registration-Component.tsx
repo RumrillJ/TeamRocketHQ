@@ -1,56 +1,94 @@
-import { useNavigate } from "react-router-dom"
-import { UserInterface } from "../Interfaces/UserInterface"
-import { useState } from "react"
-import axios from "axios"
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import RocketLogo from './rocketlogo.png';
+import './Registration.css';
 
-export const RegistrationComponent: React.FC = () => {
+//registration component
+// test
+export const RegistrationComponent = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  const [user, setUser] = useState({
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
 
-    const [user, setUser] = useState<UserInterface>({
-        username: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        email: ""
-    })
+  const storeValues = (input : any) => {
+    const { name, value } = input.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const storeValues = (input: any) => {
-        if(input.target.name === "username"){
-        setUser((user) => ({...user, username: input.target.value}))
-        }else if((input.target.name === "password")){
-        setUser((user) => ({...user, password: input.target.value}))
-        }else if((input.target.name === "firstName")){
-        setUser((user) => ({...user, firstName: input.target.value}))
-        }else if((input.target.name === "lastName")){
-        setUser((user) => ({...user, lastName: input.target.value}))
-        }else if((input.target.name === "email")){
-        setUser((user) => ({...user, email: input.target.value}))
-        }
+  const handleKeyPress = (e : any) => {
+    if (e.key === 'Enter') {
+      register(); // Trigger register when "Enter" is pressed
     }
+  };
 
-    const register = async () => {
-        const response = await axios.post("http://localhost:8080/users/register", user)
-        navigate("/login")
+  const register = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/users/register', user);
+      navigate('/login');
+      alert ('Registration successful! Please login to continue.')
+    } catch (error) {
+      alert('Registration failed. Please try again.');
     }
+  };
 
-    const returnToLogin = () => {
-        navigate('/login')
-    }
+  const returnToLogin = () => {
+    navigate('/login');
+  };
 
-    return(
-        <div>
-            <input type="text" name="username" onChange={storeValues} placeholder="Username"/>
-            <input type="password" name="password" onChange={storeValues} placeholder="password"/>
-            <input type="text" name="firstName" onChange={storeValues} placeholder="firstname"/>
-            <input type="text" name="lastName" onChange={storeValues} placeholder="lastname"/>
-            <input type="email" name="email" onChange={storeValues} placeholder="email"/>
-            <button onClick={register}>Register</button>
-            <button onClick={returnToLogin}>Back to login</button>
-        
-        </div>
-
-    )
-
-
-}
+  return (
+    <div className="login-container">
+      <div className="login-box">
+        <img src={RocketLogo} alt="Rocket Logo" />
+        <h1>Register for Team Rocket</h1>
+        <input
+          type="text"
+          name="username"
+          onChange={storeValues}
+          placeholder="Username"
+          onKeyPress={handleKeyPress} // Detect the "Enter" key
+        />
+        <input
+          type="password"
+          name="password"
+          onChange={storeValues}
+          placeholder="Password"
+          onKeyPress={handleKeyPress}
+        />
+        <input
+          type="text"
+          name="firstName"
+          onChange={storeValues}
+          placeholder="First Name"
+          onKeyPress={handleKeyPress}
+        />
+        <input
+          type="text"
+          name="lastName"
+          onChange={storeValues}
+          placeholder="Last Name"
+          onKeyPress={handleKeyPress}
+        />
+        <input
+          type="email"
+          name="email"
+          onChange={storeValues}
+          placeholder="Email"
+          onKeyPress={handleKeyPress}
+        />
+        <button className="signin-button" onClick={register}>
+          Register
+        </button>
+        <button className="join-now-button" onClick={returnToLogin}>
+          Back to Login
+        </button>
+      </div>
+    </div>
+  );
+};

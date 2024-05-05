@@ -1,86 +1,94 @@
-import { useLocation, useNavigate } from "react-router-dom"
-import { ReimbursementInterface } from "../../Interfaces/ReimbursementInterface"
-import { useEffect, useState } from "react"
-import axios from "axios"
-//CaptainHome
-export const AllReimbursements: React.FC<any> = () => {
-    
-    const navigate = useNavigate()
-    
-    const createReimbursement = () => {
-        navigate("/home/reimbursement/createReimbusement")
+import { useEffect, useState } from 'react';
+import { ReimbursementInterface } from '../../Interfaces/ReimbursementInterface';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import RocketLogo from './rocketlogo.png';
+import './Grunt.css'; // Use the correct CSS file
 
+export const AllReimbursements: React.FC = () => {
+  const navigate = useNavigate();
+
+  const [reimb, setReimb] = useState<ReimbursementInterface[]>([]);
+  const [status, setStatus] = useState('');
+  const [reimbId, setReimbId] = useState(0);
+
+  useEffect(() => {
+    getAllReimbs();
+  }, []);
+
+  const getAllReimbs = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/reimbs/allReimbs', { withCredentials: true });
+      setReimb(response.data);
+    } catch (error) {
+      console.error('Failed to fetch reimbursements:', error);
     }
-    const manageUsers = () => {
-        navigate('/home/manage-users')
+  };
 
+  const updateReimbStatus = async () => {
+    try {
+      const data = { reimbId, status };
+      const response = await axios.put(
+        `http://localhost:8080/reimbs/updateReimbStatus/${reimbId}`,
+        data,
+        { withCredentials: true }
+      );
+      console.log('Update successful:', response.data);
+      getAllReimbs();
+    } catch (error) {
+      console.error('Failed to update reimbursement:', error);
     }
+  };
 
-    const [reimb, setReimb] = useState<ReimbursementInterface[]>([])
-    const [status, setStatus] = useState('')
-    const [reimbId, setReimbId] = useState(0)
-    const [description, setDescription] = useState('')
-    const [amount, setAmount] = useState(0)
+  return (
+    <div className="reimb-page">
+      <div className="reimb-box">
+        <img src={RocketLogo} alt="Rocket Logo" />
+        <h1>All Reimbursements</h1>
 
-    const getReimbInput = (reimbInput: any) => {
-        setReimbId(reimbInput.target.value)
-    }
-    
-    useEffect(() => {
-        getAllReimbs()
-    }, [])
-    
-    const updateReimbStatus = async() => {
-        
-        try{
-            const data = {
-                reimbId: reimbId,
-                status: status,
-                description: '',
-                amount: 0
-            }
-            const response = await axios.put(`http://localhost:8080/reimbs/updateReimbStatus/${reimbId}`, data,
-            {withCredentials:true})
-            getAllReimbs()
-        }catch (error){
-            console.error('Failed to find reimbursement', error)
-        }
-    }
+        <table className="reimb-table"> 
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reimb.map((r) => (
+              <tr key={r.reimbId}>
+                <td>{r.reimbId}</td>
+                <td>{r.description}</td>
+                <td>{r.amount}</td>
+                <td>{r.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-   const mapReimbs = () => {
-        return reimb.map(reimb => (
-            <div key={reimb.reimbId}>
-                {reimb.reimbId},
-                {reimb.description},
-                {reimb.amount},
-                {reimb.status}
-            </div>
-        ));
-    }
-    const getAllReimbs = async() => {
+        <select
+          id="statusDropdown"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="">Select an option</option>
+          <option value="APPROVED">APPROVED</option>
+          <option value="DENIED">DENIED</option>
+          <option value="PENDING">PENDING</option>
+        </select>
 
-        const response = await axios.get('http://localhost:8080/reimbs/allReimbs', {withCredentials:true})
-        setReimb(response.data)
-    }
+        <input
+          type="text"
+          placeholder="Enter Reimbursement ID"
+          onChange={(e) => setReimbId(Number(e.target.value))}
+        />
 
-    const location = useLocation()
-    const {data} = location.state || {}
-    console.log(data) 
-
-
-    return(
-        
-        <div>
-            {mapReimbs()}
-            <select id="myDropdown" value={status} onChange={(e) => setStatus(e.target.value)}>
-                <option value="">Select an option</option> {"PENDING"}
-                <option value="APPROVED">APPROVED</option>
-                <option value="DENIED">DENIED</option>
-                <option value="PENDING">PENDING</option>
-            </select>
-            <input type="text" onChange={getReimbInput} placeholder="Enter Reimbursement Id"/>
-            <button onClick={updateReimbStatus}>Update Reimbursement</button>
-            <button onClick={() => {navigate('/home/reimbursement/createReimbusement')}}>Create Reimbursement</button>
-        </div>
-    )
-}
+        <button onClick={updateReimbStatus}>Update Reimbursement</button>
+        <button onClick={() => navigate('/home/reimbursement/createReimbusement')}>
+          Create Reimbursement
+        </button>
+      </div>
+    </div>
+  );
+};
